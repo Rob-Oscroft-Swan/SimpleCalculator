@@ -1,60 +1,126 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  font-weight: normal;
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif;
 }
 
 body {
-  padding: 0;
-  margin: 0;
-  background: linear-gradient(to right, rgb(0, 132, 255), rgb(69, 207, 27));
-}
-
-.Calculator-grid {
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  min-height: 100vh;
-  grid-template-columns: repeat(4, 100px);
-  grid-template-rows: minmax(120px, auto) repeat(5, 100px);
-}
-
-.Calculator-grid > button {
-  cursor: pointer;
-  font-size: 2rem;
-  border: 1px solid white;
-  outline: none;
-  background-color: rgba(225, 225, 225, 0.75);
-}
-
-.Calculator-grid > button:hover {
-  background-color: rgba(225, 225, 225, 0.9);
-}
-
-.span-two {
-  grid-column: span 2;
-}
-
-.output {
-  grid-column: 1/-1;
-  background-color: rgba(0, 0, 0, 0.75);
   display: flex;
-  align-items: flex-end;
-  justify-content: space-around;
-  flex-direction: column;
-  padding: 10px;
-  word-wrap: break-word;
-  word-break: break-all;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #222;
+  background-image: url("https://www.dropbox.com/s/h6jemaa0n5ixyn2/Chapmans.jpg?raw=1");
+  background-size: cover;
+  background-position: center;
+  font-size: 120%;
 }
 
-.output .previous-operand {
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 1.5rem;
-}
-
-.output .current-operand {
+.card {
+  background: #000000d6;
   color: white;
-  font-size: 2.5rem;
+  padding: 2em;
+  border-radius: 30px;
+  width: 100%;
+  max-width: 420px;
+  margin: 1em;
+  justify-content: space-evenly;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-btn {
+  margin: 0.5em;
+  outline: none;
+  border: none;
+  border-radius: 50%;
+  height: 3em;
+  width: 3em;
+  background: #b1b1b12b;
+}
+
+.search-btn:hover {
+  background: #b1b1b19b;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.search-bar {
+  border: none;
+  outline: none;
+  width: calc(100% - 80px);
+  max-width: auto;
+  padding: 0.5em 1em;
+  border-radius: 24px;
+  background: #b1b1b12b;
+  color: white;
+  font-size: 120%;
+}
+
+.search-bar:hover {
+  background: #b1b1b16b;
+  transition: 0.2s ease-in-out;
+}
+
+.city {
+  margin-top: 25px;
+}
+
+h1.temp {
+  margin: 0;
+  margin-bottom: 0.4em;
+}
+
+.description {
+  text-transform: capitalize;
+  margin-left: 8px;
+}
+
+.weather.loading {
+  visibility: hidden;
+  max-height: 20px;
+  position: relative;
+}
+
+.weather.loading:after {
+  visibility: visible;
+  content: "Loading...";
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 20px;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.footer-flex {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  height: 50px;
+  align-items: center;
+  box-sizing: border-box;
+  background-color: rgba(43, 153, 226, 0.7);
+  margin: 50px;
+  width: auto;
+  max-width: 450px;
+  border-radius: 25px;
+}
+
+.Slogan {
+  padding: 1em;
+}
+
+.logo {
+  width: 25px;
+  padding: 1rem;
 }

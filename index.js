@@ -1,136 +1,60 @@
-class Calculator {
-  constructor(previousOperandTextElement, currentOperandTextElement) {
-    this.previousOperandTextElement = previousOperandTextElement;
-    this.currentOperandTextElement = currentOperandTextElement;
-    this.clear();
-  }
+let weather = {
+  apiKey: "2f7ce8c8ee403f45539962027ccae114",
+  fetchWeather: function (city) {
+    fetch(
+      "https://api.openweathermap.org/data/2.5/weather?q=" +
+        city +
+        "&units=metric&appid=" +
+        this.apiKey
+    )
+      .then((response) => response.json())
+      .then((data) => this.displayWeather(data));
+  },
+  displayWeather: function (data) {
+    const { name } = data;
+    const { icon, description } = data.weather[0];
+    const { temp, humidity } = data.main;
+    const { speed, deg } = data.wind;
+    const roundedTemp = Math.round(temp);
+    const directions = [
+      "Northerly",
+      "North Easterly",
+      "Easterly",
+      "South Easterly",
+      "Southerly",
+      "South Westerly",
+      "Westerly",
+      "North Westerly",
+    ];
+    const directionIndex = Math.floor(((deg + 22.5) % 360) / 45);
+    const direction = directions[directionIndex];
 
-  clear() {
-    this.currentOperand = ``;
-    this.previousOperand = ``;
-    this.operation = undefined;
-  }
+    document.querySelector(".city").innerText = "Weather in " + name;
+    document.querySelector(".icon").src =
+      "https://openweathermap.org/img/wn/" + icon + ".png";
+    document.querySelector(".description").innerText = description;
+    document.querySelector(".temp").innerText = roundedTemp + "°C";
+    document.querySelector(".humidity").innerText =
+      "Humidity: " + humidity + "%";
+    document.querySelector(".wind").innerText =
+      "Wind Speed: " + speed + "km/h   " + direction;
+    document.querySelector(".weather").classList.remove("loading");
+  },
+  search: function () {
+    this.fetchWeather(document.querySelector(".search-bar").value);
+  },
+};
 
-  delete() {
-    this.currentOperand = this.currentOperand.toString().slice(0, -1);
-  }
+document.querySelector(".search-btn").addEventListener("click", function () {
+  weather.search();
+});
 
-  appendNumber(number) {
-    if (number === "." && this.currentOperand.includes(".")) return;
-    this.currentOperand = this.currentOperand.toString() + number.toString();
-  }
-
-  chooseOperation(operation) {
-    if (this.currentOperand === "") return;
-    if (this.previousOperand !== "") {
-      this.compute();
+document
+  .querySelector(".search-bar")
+  .addEventListener("keyup", function (event) {
+    if (event.key == "Enter") {
+      weather.search();
     }
-    this.operation = operation;
-    this.previousOperand = this.currentOperand;
-    this.currentOperand = "";
-  }
-
-  compute() {
-    let computation;
-    const prev = parseFloat(this.previousOperand);
-    const current = parseFloat(this.currentOperand);
-    if (isNaN(prev) || isNaN(current)) return;
-    switch (this.operation) {
-      case "+":
-        computation = prev + current;
-        break;
-      case "-":
-        computation = prev - current;
-        break;
-      case "÷":
-        computation = prev / current;
-        break;
-      case "*":
-        computation = prev * current;
-        break;
-      default:
-        return;
-    }
-    this.currentOperand = computation;
-    this.operation = undefined;
-    this.previousOperand = "";
-  }
-
-  getDisplayNumber(number) {
-    const stringNumber = number.toString();
-    const interDigits = parseFloat(stringNumber.split(".")[0]);
-    const decimalDigits = stringNumber.split(".")[1];
-    let integerDisplay;
-    if (isNaN(interDigits)) {
-      integerDisplay = "";
-    } else {
-      integerDisplay = interDigits.toLocaleString("en", {
-        maximumFractionDigits: 0,
-      });
-    }
-    if (decimalDigits != null) {
-      return `${integerDisplay}.${decimalDigits}`;
-    } else {
-      return integerDisplay;
-    }
-  }
-
-  updateDisplay() {
-    this.currentOperandTextElement.innerText = this.getDisplayNumber(
-      this.currentOperand
-    );
-    if (this.operation != null) {
-      this.previousOperandTextElement.innerText = `${this.getDisplayNumber(
-        this.previousOperand
-      )} ${this.operation}`;
-    } else {
-      this.previousOperandTextElement.innerText = "";
-    }
-  }
-}
-
-const numberButtons = document.querySelectorAll("[data-number]");
-const operationButtons = document.querySelectorAll("[data-operation]");
-const equalsButton = document.querySelector("[data-equals]");
-const deleteButton = document.querySelector("[data-delete]");
-const allClearButton = document.querySelector("[data-all-clear]");
-const previousOperandTextElement = document.querySelector(
-  "[data-previous-operand]"
-);
-const currentOperandTextElement = document.querySelector(
-  "[data-current-operand]"
-);
-
-const calculator = new Calculator(
-  previousOperandTextElement,
-  currentOperandTextElement
-);
-
-numberButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    calculator.appendNumber(button.innerText);
-    calculator.updateDisplay();
   });
-});
 
-operationButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    calculator.chooseOperation(button.innerText);
-    calculator.updateDisplay();
-  });
-});
-
-equalsButton.addEventListener("click", (button) => {
-  calculator.compute();
-  calculator.updateDisplay();
-});
-
-allClearButton.addEventListener("click", (button) => {
-  calculator.clear();
-  calculator.updateDisplay();
-});
-
-deleteButton.addEventListener("click", (button) => {
-  calculator.delete();
-  calculator.updateDisplay();
-});
+weather.fetchWeather("Cape Town");
